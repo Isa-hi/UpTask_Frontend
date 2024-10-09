@@ -34,14 +34,11 @@ const taskStatusTranslation: { [key: string]: string } = {
 };
 
 export default function TasksList({ tasks }: TasksListProps) {
-  console.log(tasks);
-
   const groupedTasks = tasks.reduce((acc, task) => {
     let currentGroup = acc[task.status] ? [...acc[task.status]] : [];
     currentGroup = [...currentGroup, task];
     return { ...acc, [task.status]: currentGroup };
   }, initialStatusGroups);
-  console.log(groupedTasks);
 
   return (
     <>

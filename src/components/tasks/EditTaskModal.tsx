@@ -39,7 +39,7 @@ export default function EditTaskModal({ task, taskId }: EditTaskModalProps) {
           });
         },
     onSuccess: (data) => {
-        queryclient.invalidateQueries({queryKey: ['editProject', projectId]});
+        queryclient.invalidateQueries({queryKey: ['project', projectId]});
         //navigate('/');
         toast.success(data, {
             closeOnClick: false,

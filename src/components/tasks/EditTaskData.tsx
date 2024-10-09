@@ -12,12 +12,11 @@ export default function EditTaskData() {
   const editTaskId = searchParams.get("editTaskId")!;
   
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ["getTask", editTaskId],
     queryFn: () => getTaskById({ projectId, taskId: editTaskId}),
     enabled: !!editTaskId,
   });
-  console.log(data);
 
   if (isError) return <Navigate to={'/404'} />
   

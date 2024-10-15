@@ -7,15 +7,20 @@ import { createAccount } from "@/api/AuthAPI";
 import { toast } from "react-toastify";
 
 export default function RegisterView() {
-  
   const initialValues: UserRegistrationForm = {
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-  }
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+  };
 
-  const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<UserRegistrationForm>({ defaultValues: initialValues });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<UserRegistrationForm>({ defaultValues: initialValues });
 
   const { mutate } = useMutation({
     mutationFn: createAccount,
@@ -23,20 +28,20 @@ export default function RegisterView() {
     onSuccess: (data) => {
       toast.success(data);
       reset();
-    }
-  })
+    },
+  });
 
-  const password = watch('password');
+  const password = watch("password");
 
   const handleRegister = (formData: UserRegistrationForm) => {
     mutate(formData);
-  }
+  };
 
   return (
     <>
       <h1 className="text-5xl font-black text-white">Crear Cuenta</h1>
       <p className="text-2xl font-light text-white mt-5">
-        Llena el formulario para {''}
+        Llena el formulario para {""}
         <span className=" text-fuchsia-500 font-bold"> crear tu cuenta</span>
       </p>
 
@@ -46,10 +51,9 @@ export default function RegisterView() {
         noValidate
       >
         <div className="flex flex-col gap-5">
-          <label
-            className="font-normal text-2xl"
-            htmlFor="email"
-          >Email</label>
+          <label className="font-normal text-2xl" htmlFor="email">
+            Email
+          </label>
           <input
             id="email"
             type="email"
@@ -63,15 +67,11 @@ export default function RegisterView() {
               },
             })}
           />
-          {errors.email && (
-            <ErrorMessage>{errors.email.message}</ErrorMessage>
-          )}
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </div>
 
         <div className="flex flex-col gap-5">
-          <label
-            className="font-normal text-2xl"
-          >Nombre</label>
+          <label className="font-normal text-2xl">Nombre</label>
           <input
             type="name"
             placeholder="Nombre de Registro"
@@ -80,15 +80,11 @@ export default function RegisterView() {
               required: "El Nombre de usuario es obligatorio",
             })}
           />
-          {errors.name && (
-            <ErrorMessage>{errors.name.message}</ErrorMessage>
-          )}
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
         </div>
 
         <div className="flex flex-col gap-5">
-          <label
-            className="font-normal text-2xl"
-          >Password</label>
+          <label className="font-normal text-2xl">Password</label>
 
           <input
             type="password"
@@ -98,8 +94,8 @@ export default function RegisterView() {
               required: "El Password es obligatorio",
               minLength: {
                 value: 8,
-                message: 'El Password debe ser mínimo de 8 caracteres'
-              }
+                message: "El Password debe ser mínimo de 8 caracteres",
+              },
             })}
           />
           {errors.password && (
@@ -108,9 +104,7 @@ export default function RegisterView() {
         </div>
 
         <div className="flex flex-col gap-5">
-          <label
-            className="font-normal text-2xl"
-          >Repetir Password</label>
+          <label className="font-normal text-2xl">Repetir Password</label>
 
           <input
             id="password_confirmation"
@@ -119,7 +113,8 @@ export default function RegisterView() {
             className="w-full p-3  border-gray-300 border"
             {...register("password_confirmation", {
               required: "Repetir Password es obligatorio",
-              validate: value => value === password || 'Los Passwords no son iguales'
+              validate: (value) =>
+                value === password || "Los Passwords no son iguales",
             })}
           />
 
@@ -130,19 +125,27 @@ export default function RegisterView() {
 
         <input
           type="submit"
-          value='Registrarme'
+          value="Registrarme"
           className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
         />
       </form>
 
       <nav className="mt-10 flex flex-col space-y-4">
         <Link
-          to={'/auth/login'}
+          to={"/auth/login"}
           className="text-gray-300 text-center font-normal"
         >
-          ¿Ya tienes cuenta? <span className="text-fuchsia-500 font-bold">Inicia Sesión</span>
+          ¿Ya tienes cuenta?{" "}
+          <span className="text-fuchsia-500 font-bold">Inicia Sesión</span>
+        </Link>
+        <Link
+          to={"/auth/forgot-password"}
+          className="text-gray-300 text-center font-normal"
+        >
+          ¿Olvidaste tu contraseña?{" "}
+          <span className="text-fuchsia-500 font-bold">Reestablecela aquí</span>
         </Link>
       </nav>
     </>
-  )
+  );
 }

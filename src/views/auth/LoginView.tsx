@@ -7,34 +7,41 @@ import { authenticateUser } from "@/api/AuthAPI";
 import { toast } from "react-toastify";
 
 export default function LoginView() {
-
   const initialValues: UserLoginForm = {
-    email: '',
-    password: '',
-  }
-  const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
+    email: "",
+    password: "",
+  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues: initialValues });
 
   const { mutate } = useMutation({
     mutationFn: authenticateUser,
     onError: (error: Error) => toast.error(error.message),
     onSuccess: (data) => {
       toast.success(data);
-    }
-  })
+    },
+  });
 
   const handleLogin = (formData: UserLoginForm) => mutate(formData);
 
   return (
     <>
+      <h1 className="text-5xl font-black text-white">Iniciar Sesión</h1>
+      <p className="text-2xl font-light text-white mt-5">
+        Comienza a planear tus proyectos {""}
+        <span className=" text-fuchsia-500 font-bold"> iniciando sesión</span>
+      </p>
+
       <form
         onSubmit={handleSubmit(handleLogin)}
-        className="space-y-8 p-10 bg-white rounded-xl"
+        className="space-y-8 p-10 bg-white rounded-xl mt-10"
         noValidate
       >
         <div className="flex flex-col gap-5">
-          <label
-            className="font-normal text-2xl"
-          >Email</label>
+          <label className="font-normal text-2xl">Email</label>
 
           <input
             id="email"
@@ -49,15 +56,11 @@ export default function LoginView() {
               },
             })}
           />
-          {errors.email && (
-            <ErrorMessage>{errors.email.message}</ErrorMessage>
-          )}
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </div>
 
         <div className="flex flex-col gap-5">
-          <label
-            className="font-normal text-2xl"
-          >Password</label>
+          <label className="font-normal text-2xl">Password</label>
 
           <input
             type="password"
@@ -74,7 +77,7 @@ export default function LoginView() {
 
         <input
           type="submit"
-          value='Iniciar Sesión'
+          value="Iniciar Sesión"
           className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
         />
       </form>
@@ -84,9 +87,17 @@ export default function LoginView() {
           to={"/auth/register"}
           className="text-gray-300 text-center font-normal"
         >
-         ¿No tienes cuenta? <span className="text-fuchsia-500 font-bold">Registrate aquí </span>
+          ¿No tienes cuenta?{" "}
+          <span className="text-fuchsia-500 font-bold">Registrate aquí </span>
+        </Link>
+        <Link
+          to={"/auth/forgot-password"}
+          className="text-gray-300 text-center font-normal"
+        >
+          ¿Olvidaste tu contraseña?{" "}
+          <span className="text-fuchsia-500 font-bold">Reestablecela aquí</span>
         </Link>
       </nav>
     </>
-  )
+  );
 }

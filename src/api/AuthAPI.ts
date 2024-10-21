@@ -85,3 +85,15 @@ export const updatePasswordWithToken = async ({formData, token} : {formData: New
         }
     }
 }
+
+export const getUser = async () => {
+    try {
+        const url = "/auth/user";
+        const { data } = await api.get(url);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+        throw new Error(error.response.data.error);
+        }
+    }
+}

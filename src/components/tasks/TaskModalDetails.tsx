@@ -14,7 +14,6 @@ import { taskStatusTranslation } from "@/locales/es";
 import { TaskStatus } from "@/types/index";
 
 export default function TaskModalDetails() {
-
   const queryClient = useQueryClient();
 
   const params = useParams();
@@ -50,14 +49,12 @@ export default function TaskModalDetails() {
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const status = e.target.value as TaskStatus;
     mutate({ projectId, taskId, status });
-  }
+  };
 
   if (isError) {
     toast.error("No existe la tarea", { toastId: "error" });
     return <Navigate to={`/projects/${projectId}`} />;
   }
-
-  console.log(data);
 
   if (data)
     return (
@@ -100,13 +97,30 @@ export default function TaskModalDetails() {
                     </p>
                     <Dialog.Title
                       as="h3"
-                      className="font-black text-4xl text-slate-600 my-5"
+                      className="font-black text-4xl text-fuchsia-600 my-5"
                     >
                       {data.name}
                     </Dialog.Title>
                     <p className="text-lg text-slate-500 mb-2">
                       Descripción: {data.description}{" "}
                     </p>
+
+                    <p className="text-xl font-bold text-slate-600">
+                      Historial de cambios
+                    </p>
+
+                    <ul className="list-decimal ml-6">
+                      {data.completedBy.map((activityLog) => (
+                      <li key={activityLog._id}>
+                        <p>
+                          <span className="font-bold text-slate-600">{taskStatusTranslation[activityLog.status]} - </span>
+                          {activityLog.user.name}
+                        </p>
+                      </li>
+                    ))}
+                    </ul>
+                    
+
                     <div className="my-5 space-y-3">
                       <label className="font-bold">Estado Actual: </label>
 

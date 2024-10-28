@@ -31,7 +31,7 @@ export const getTaskById = async ({
   try {
     const url = `/projects/${projectId}/tasks/${taskId}`;
     const { data } = await api.get(url);
-    const response = TaskSchema.safeParse(data);
+    const response = TaskSchema.safeParse(data);       
     return response.data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {
@@ -79,7 +79,7 @@ export const updateTaskStatus = async ({
 }: Pick<TaskAPI, "projectId" | "taskId" | "status">) => {
   try {
     const url = `/projects/${projectId}/tasks/${taskId}/status`;
-    const { data } = await api.post<string>(url, { status });
+    const { data } = await api.post<string>(url, { status });    
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {

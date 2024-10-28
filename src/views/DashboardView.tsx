@@ -5,8 +5,10 @@ import { deleteProject, getProjects } from "@/api/ProjectAPI";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function DashboardView() {
+  const { data: user, isLoading: authLoading } = useAuth();
   const { data, isLoading } = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
@@ -33,14 +35,14 @@ export default function DashboardView() {
         draggable: false,
         progress: undefined,
       });
-  }})
+    },
+  });
 
-  if (isLoading) {
+  if (isLoading && authLoading) {
     return <p>Cargando...</p>;
   }
-  //console.log(data);
 
-  if (data)
+  if (data && user) {
     return (
       <>
         <h1 className="text-5xl font-black">Mis Proyectos</h1>
@@ -69,6 +71,17 @@ export default function DashboardView() {
               >
                 <div className="flex min-w-0 gap-x-4">
                   <div className="min-w-0 flex-auto space-y-2">
+                    <div>
+                      {project.manager === user._id ? (
+                        <p className="font-bold text-xs uppercase bg-indigo-50 text-indigo-500 border-2 border-indigo-500 rounded-lg inline-block py-1 px-5 mb-2">
+                          Manager
+                        </p>
+                      ) : (
+                        <p className="font-bold text-xs uppercase bg-green-50 text-green-500 border-2 border-green-500 rounded-lg inline-block py-1 px-5 mb-2">
+                          Colaborador
+                        </p>
+                      )}
+                    </div>
                     <Link
                       to={`/projects/${project._id}`}
                       className="text-gray-600 cursor-pointer hover:underline text-3xl font-bold"
@@ -110,23 +123,28 @@ export default function DashboardView() {
                             Ver Proyecto
                           </Link>
                         </Menu.Item>
-                        <Menu.Item>
-                          <Link
-                            to={`/projects/${project._id}/edit`}
-                            className="block px-3 py-1 text-sm leading-6 text-gray-900"
-                          >
-                            Editar Proyecto
-                          </Link>
-                        </Menu.Item>
-                        <Menu.Item>
-                          <button
-                            type="button"
-                            className="block px-3 py-1 text-sm leading-6 text-red-500"
-                            onClick={() => mutate(project._id)}
-                          >
-                            Eliminar Proyecto
-                          </button>
-                        </Menu.Item>
+
+                        {project.manager === user._id && (
+                          <>
+                            <Menu.Item>
+                              <Link
+                                to={`/projects/${project._id}/edit`}
+                                className="block px-3 py-1 text-sm leading-6 text-gray-900"
+                              >
+                                Editar Proyecto
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                              <button
+                                type="button"
+                                className="block px-3 py-1 text-sm leading-6 text-red-500"
+                                onClick={() => mutate(project._id)}
+                              >
+                                Eliminar Proyecto
+                              </button>
+                            </Menu.Item>
+                          </>
+                        )}
                       </Menu.Items>
                     </Transition>
                   </Menu>
@@ -136,9 +154,18 @@ export default function DashboardView() {
           </ul>
         ) : (
           <div className="text-center mx-auto p-3">
-            <p>No hay proyectos aún. <Link to={'/projects/create'} className="font-bold text-fuchsia-500 hover:text-fuchsia-700">Crear un proyecto</Link></p>
+            <p>
+              No hay proyectos aún.{" "}
+              <Link
+                to={"/projects/create"}
+                className="font-bold text-fuchsia-500 hover:text-fuchsia-700"
+              >
+                Crear un proyecto
+              </Link>
+            </p>
           </div>
         )}
       </>
     );
+  }
 }

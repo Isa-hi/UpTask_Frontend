@@ -41,7 +41,7 @@ export default function EditTaskModal({ task, taskId }: EditTaskModalProps) {
     onSuccess: (data) => {
         queryclient.invalidateQueries({queryKey: ['project', projectId]});
         queryclient.invalidateQueries({queryKey: ['task', taskId]});
-        //navigate('/');
+        queryclient.invalidateQueries({queryKey: ['getTask', taskId]});
         toast.success(data, {
             closeOnClick: false,
             pauseOnHover: false,
@@ -55,8 +55,9 @@ export default function EditTaskModal({ task, taskId }: EditTaskModalProps) {
 
   const handleEditTask = (formData: TaskFormData) => {
     const data = {formData, projectId, taskId}
-    mutate(data);
+    mutate(data);   
     console.log(formData);
+   
   }
 
     return (

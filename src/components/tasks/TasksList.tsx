@@ -4,6 +4,7 @@ import { taskStatusTranslation } from "@/locales/es";
 
 type TasksListProps = {
   tasks: Task[];
+  canEdit: boolean;
 };
 
 type GroupedTasks = {
@@ -26,7 +27,7 @@ const statusStyles: { [key: string]: string } = {
   completed: "border-t-emerald-500",
 };
 
-export default function TasksList({ tasks }: TasksListProps) {
+export default function TasksList({ tasks, canEdit }: TasksListProps) {
   const groupedTasks = tasks.reduce((acc, task) => {
     let currentGroup = acc[task.status] ? [...acc[task.status]] : [];
     currentGroup = [...currentGroup, task];
@@ -49,7 +50,7 @@ export default function TasksList({ tasks }: TasksListProps) {
                   No Hay tareas
                 </li>
               ) : (
-                tasks.map((task) => <TaskCard key={task._id} task={task} />)
+                tasks.map((task) => <TaskCard key={task._id} task={task} canEdit={canEdit} />)
               )}
             </ul>
           </div>

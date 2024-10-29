@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { formatDate } from "@/utils/index";
 import { taskStatusTranslation } from "@/locales/es";
 import { TaskStatus } from "@/types/index";
+import AddNoteForm from "../notes/AddNoteForm";
 
 export default function TaskModalDetails() {
   const queryClient = useQueryClient();
@@ -105,21 +106,26 @@ export default function TaskModalDetails() {
                       Descripción: {data.description}{" "}
                     </p>
 
-                    <p className="text-xl font-bold text-slate-600">
-                      Historial de cambios
-                    </p>
-
-                    <ul className="list-decimal ml-6">
-                      {data.completedBy.map((activityLog) => (
-                      <li key={activityLog._id}>
-                        <p>
-                          <span className="font-bold text-slate-600">{taskStatusTranslation[activityLog.status]} - </span>
-                          {activityLog.user.name}
+                    {data.completedBy.length > 0 && (
+                      <>
+                        <p className="text-xl font-bold text-slate-600">
+                          Historial de cambios
                         </p>
-                      </li>
-                    ))}
-                    </ul>
-                    
+
+                        <ul className="list-decimal ml-6">
+                          {data.completedBy.map((activityLog) => (
+                            <li key={activityLog._id}>
+                              <p>
+                                <span className="font-bold text-slate-600">
+                                  {taskStatusTranslation[activityLog.status]} -{" "}
+                                </span>
+                                {activityLog.user.name}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
 
                     <div className="my-5 space-y-3">
                       <label className="font-bold">Estado Actual: </label>
@@ -137,6 +143,8 @@ export default function TaskModalDetails() {
                           )
                         )}
                       </select>
+
+                      <AddNoteForm />
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>

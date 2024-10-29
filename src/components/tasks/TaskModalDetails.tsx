@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { formatDate } from "@/utils/index";
 import { taskStatusTranslation } from "@/locales/es";
 import { TaskStatus } from "@/types/index";
-import AddNoteForm from "../notes/AddNoteForm";
+import NotesPanel from "../notes/NotesPanel";
 
 export default function TaskModalDetails() {
   const queryClient = useQueryClient();
@@ -108,7 +108,7 @@ export default function TaskModalDetails() {
 
                     {data.completedBy.length > 0 && (
                       <>
-                        <p className="text-xl font-bold text-slate-600">
+                        <p className="text-2xl font-bold text-slate-600">
                           Historial de cambios
                         </p>
 
@@ -144,7 +144,7 @@ export default function TaskModalDetails() {
                         )}
                       </select>
 
-                      <AddNoteForm />
+                      <NotesPanel notes={data.notes} />
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>

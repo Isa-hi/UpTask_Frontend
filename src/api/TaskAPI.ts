@@ -31,7 +31,7 @@ export const getTaskById = async ({
   try {
     const url = `/projects/${projectId}/tasks/${taskId}`;
     const { data } = await api.get(url);
-    const response = TaskSchema.safeParse(data);       
+    const response = TaskSchema.safeParse(data);          
     return response.data;
   } catch (error) {
     if (isAxiosError(error) && error.response) {

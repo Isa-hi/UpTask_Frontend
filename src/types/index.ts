@@ -29,8 +29,9 @@ export const userSchema = authSchema
   .extend({
     _id: z.string(),
   });
-export type User = z.infer<typeof userSchema>;
-
+  export type User = z.infer<typeof userSchema>;
+  export type UserProfileData = Pick<User, "name" | "email">;
+  
 /** Notes */
 export const noteSchema = z.object({
   _id: z.string(),

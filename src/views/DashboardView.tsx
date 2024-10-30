@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
-import { deleteProject, getProjects } from "@/api/ProjectAPI";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { getProjects } from "@/api/ProjectAPI";
+import { useQuery } from "@tanstack/react-query";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import DeleteProjectModal from "@/components/projects/DeleteProjectModal";
 
 export default function DashboardView() {
   const { data: user, isLoading: authLoading } = useAuth();
@@ -14,29 +14,8 @@ export default function DashboardView() {
     queryFn: getProjects,
   });
 
-  const queryClient = useQueryClient();
-
-  const { mutate } = useMutation({
-    mutationFn: deleteProject,
-    onError: (error) => {
-      toast.error(error.message, {
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-      });
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-      toast.success(data, {
-        position: "top-right",
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-      });
-    },
-  });
+  const location = useLocation();
+  const navigate = useNavigate();
 
   if (isLoading && authLoading) {
     return <p>Cargando...</p>;
@@ -138,7 +117,7 @@ export default function DashboardView() {
                               <button
                                 type="button"
                                 className="block px-3 py-1 text-sm leading-6 text-red-500"
-                                onClick={() => mutate(project._id)}
+                                onClick={() => navigate(location.pathname + `?deleteProject=${project._id}`)}
                               >
                                 Eliminar Proyecto
                               </button>
@@ -165,6 +144,7 @@ export default function DashboardView() {
             </p>
           </div>
         )}
+        <DeleteProjectModal />
       </>
     );
   }

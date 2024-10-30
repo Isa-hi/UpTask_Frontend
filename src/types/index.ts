@@ -20,6 +20,7 @@ export type ForgotPasswordForm = Pick<Auth, "email">;
 export type NewPasswordForm = Pick<Auth, "password" | "password_confirmation">;
 export type UpdateCurrentPasswordForm = Pick<Auth, "current_password" | "password" | "password_confirmation">;
 export type ConfirmToken = Pick<Auth, "token">;
+export type checkPasswordForm = Pick<Auth, "password">;
 
 /** USER */
 export const userSchema = authSchema

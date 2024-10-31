@@ -1,4 +1,4 @@
-import { getProjectById } from "@/api/ProjectAPI";
+import { getFullProject } from "@/api/ProjectAPI";
 import AddTaskModal from "@/components/tasks/AddTaskModal";
 import EditTaskData from "@/components/tasks/EditTaskData";
 import TasksList from "@/components/tasks/TasksList";
@@ -16,7 +16,7 @@ export default function ProjectDetailsView() {
   const { data: user, isLoading: authLoading } = useAuth();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["project", projectId],
-    queryFn: () => getProjectById(projectId),
+    queryFn: () => getFullProject(projectId),
   });
 
   const canEdit = useMemo(() => data?.manager === user?._id ,[data, user])

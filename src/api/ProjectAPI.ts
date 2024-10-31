@@ -2,8 +2,10 @@ import api from "@/lib/axios";
 import { isAxiosError } from "axios";
 import {
   dashboardProjectSchema,
+  EditProjectSchema,
   Project,
   ProjectFormData,
+  projectSchema,
 } from "@/types/index";
 
 export const createProject = async (formData: ProjectFormData) => {
@@ -17,7 +19,7 @@ export const createProject = async (formData: ProjectFormData) => {
   }
 };
 
-export const getProjects = async () => { 
+export const getProjects = async () => {
   try {
     const { data } = await api.get("/projects");
     const response = dashboardProjectSchema.safeParse(data);
@@ -33,8 +35,25 @@ export const getProjects = async () => {
 
 export const getProjectById = async (projectId: Project["_id"]) => {
   try {
-    const { data } = await api.get(`/projects/${projectId}`);    
-    return data;
+    const { data } = await api.get(`/projects/${projectId}`);
+    const response = EditProjectSchema.safeParse(data);
+    if (response.success) {
+      return response.data;
+    }
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error);
+    }
+  }
+};
+
+export const getFullProject  = async (projectId: Project["_id"]) => {
+  try {
+    const { data } = await api.get(`/projects/${projectId}`);
+    const response = projectSchema.safeParse(data);
+    if (response.success) {
+      return response.data;
+    }
   } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error);
@@ -47,7 +66,10 @@ type EditProjectFormProps = {
   projectId: Project["_id"];
 };
 
-export const updateProject = async ({data, projectId} : EditProjectFormProps) => {
+export const updateProject = async ({
+  data,
+  projectId,
+}: EditProjectFormProps) => {
   try {
     const { data: response } = await api.put(`/projects/${projectId}`, data);
     return response;
@@ -63,8 +85,8 @@ export const deleteProject = async (projectId: Project["_id"]) => {
     const { data } = await api.delete(`/projects/${projectId}`);
     return data;
   } catch (error) {
-    if(isAxiosError(error) && error.response) {
+    if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error);
     }
   }
-}
+};

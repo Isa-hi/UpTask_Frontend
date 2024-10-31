@@ -106,7 +106,7 @@ export const projectSchema = z.object({
   clientName: z.string(),
   manager: z.string(userSchema.pick({ _id: true, name: true })),
   tasks: z.array(taskProjectSchema),
-  team: z.array(teamMemberSchema.pick({ _id: true, name: true })),
+  team: z.array(z.string(teamMemberSchema.pick({ _id: true}))),
 });
 
 export const dashboardProjectSchema = z.array(

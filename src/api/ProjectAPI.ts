@@ -51,6 +51,8 @@ export const getFullProject  = async (projectId: Project["_id"]) => {
   try {
     const { data } = await api.get(`/projects/${projectId}`);
     const response = projectSchema.safeParse(data);
+    console.log(data);    
+    console.log(response);
     if (response.success) {
       return response.data;
     }

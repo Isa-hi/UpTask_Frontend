@@ -7,8 +7,8 @@ export default function NotFound() {
         Página no encontrada
     </h1>
     <p className="mt-10 text-center text-white">
-        Talvez quieras 
-        <Link to="/" className="text-fuchsia-500"> Volver a proyectos</Link>
+        Talvez quieras{' '}
+        <Link to="/" className="text-fuchsia-500">Volver a proyectos</Link>
     </p>
     </>
   )
